@@ -49,7 +49,8 @@ pipeline {
                     rm -rf out
                     mkdir out && chmod 777 out
                     docker run -v $(realpath out):/out --rm --entrypoint sh glibc:out -c "cp -r /packages/*.pub /packages/*/*/* /out/"
-                    ~/go/bin/ghr -u $TARGET_OWNER -r $TARGET_REPO $PLATFORM-$GLIBC_VERSION-r$GLIBC_RELEASE out/
+                    ls -latr out
+                    GITHUB_TOKEN=$TARGET_GITHUB_TOKEN ~/go/bin/ghr -u $TARGET_OWNER -r $TARGET_REPO $PLATFORM-$GLIBC_VERSION-r$GLIBC_RELEASE out/
                 '''
             }
         }
