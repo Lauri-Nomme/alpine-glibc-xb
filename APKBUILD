@@ -1,11 +1,11 @@
-# Maintainer: Sasha Gerrand <alpine-pkgs@sgerrand.com>
+# Maintainer: SpectX DevOps <devops@spectx.com>
 
 pkgname="glibc"
 pkgver="${GLIBC_VERSION}"
 pkgrel="0"
 pkgdesc="GNU C Library compatibility layer"
-arch="x86_64"
-url="https://github.com/sgerrand/alpine-pkg-glibc"
+arch="${TARGETARCH}"
+url="https://github.com/lauri-nomme/alpine-glibc-xb"
 license="GPL"
 source="glibc-bin-${GLIBC_VERSION}.tar.gz
 nsswitch.conf
@@ -26,8 +26,8 @@ package() {
   rm -rf "$pkgdir"/usr/glibc-compat/lib/audit
   rm -rf "$pkgdir"/usr/glibc-compat/share
   rm -rf "$pkgdir"/usr/glibc-compat/var
-  ln -s /usr/glibc-compat/lib/ld-linux-x86-64.so.2 ${pkgdir}/lib/ld-linux-x86-64.so.2
-  ln -s /usr/glibc-compat/lib/ld-linux-x86-64.so.2 ${pkgdir}/lib64/ld-linux-x86-64.so.2
+  ln -s /usr/glibc-compat/lib/ld-linux-$arch.so.2 ${pkgdir}/lib/ld-linux-$arch.so.2
+  ln -s /usr/glibc-compat/lib/ld-linux-$arch.so.2 ${pkgdir}/lib64/ld-linux-$arch.so.2
   ln -s /usr/glibc-compat/etc/ld.so.cache ${pkgdir}/etc/ld.so.cache
 }
 
