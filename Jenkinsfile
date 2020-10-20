@@ -45,7 +45,9 @@ pipeline {
         stage('Publish') {
             steps {
                 sh  '''
-                    ([[ -d out ]] || mkdir out) && chmod 777 out
+                    ls -latr out
+                    rm -rf out
+                    mkdir out && chmod 777 out
                     docker run -v $(realpath out):/out --rm --entrypoint sh glibc:out -c "cp -r /packages/*.pub /packages/*/*/* /out/"
                     ~/go/bin/ghr -u $TARGET_OWNER -r $TARGET_REPO $PLATFORM-$GLIBC_VERSION-r$GLIBC_RELEASE out/
                 '''
