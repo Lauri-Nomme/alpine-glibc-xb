@@ -6,7 +6,7 @@ pkgrel="0"
 pkgdesc="GNU C Library compatibility layer"
 arch="${TARGETARCH}"
 url="https://github.com/lauri-nomme/alpine-glibc-xb"
-license="GPL"
+license="LGPL"
 source="glibc-bin-${GLIBC_VERSION}.tar.gz
 nsswitch.conf
 ld.so.conf"
@@ -14,7 +14,7 @@ subpackages="$pkgname-bin $pkgname-dev $pkgname-i18n"
 triggers="$pkgname-bin.trigger=/lib:/usr/lib:/usr/glibc-compat/lib"
 
 package() {
-  mkdir -p "$pkgdir/lib" "$pkgdir/lib64" "$pkgdir/usr/glibc-compat/lib/locale" "$pkgdir"/etc
+  mkdir -p "$pkgdir/lib" "$pkgdir/lib64" "$pkgdir/usr/glibc-compat/lib/locale" "$pkgdir/usr/glibc-compat/lib64" "$pkgdir/etc"
   cp -a "$srcdir"/usr "$pkgdir"
   cp "$srcdir"/nsswitch.conf "$pkgdir"/etc/nsswitch.conf
   cp "$srcdir"/ld.so.conf "$pkgdir"/usr/glibc-compat/etc/ld.so.conf
@@ -28,6 +28,7 @@ package() {
   rm -rf "$pkgdir"/usr/glibc-compat/var
   ln -s /usr/glibc-compat/lib/ld-linux-$arch.so.2 ${pkgdir}/lib/ld-linux-$arch.so.2
   ln -s /usr/glibc-compat/lib/ld-linux-$arch.so.2 ${pkgdir}/lib64/ld-linux-$arch.so.2
+  ln -s /usr/glibc-compat/lib/ld-linux-$arch.so.2 ${pkgdir}/usr/glibc-compat/lib64/ld-linux-$arch.so.2
   ln -s /usr/glibc-compat/etc/ld.so.cache ${pkgdir}/etc/ld.so.cache
 }
 
