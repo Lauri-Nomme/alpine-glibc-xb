@@ -60,10 +60,10 @@ COPY nsswitch.conf .
 ENV REPODEST /packages
 ENV ABUILD_KEY_DIR /home/builder/.abuild
 RUN mkdir -p ${ABUILD_KEY_DIR} && \
-	(([[ -n "${PRIVKEY}" ]] && echo "using passed key" && echo "$PRIVKEY" > ${ABUILD_KEY_DIR}/${MAINTAINER}-key.pem) || \
-    openssl genrsa -out ${ABUILD_KEY_DIR}/${MAINTAINER}-key.pem 2048) && \
-    openssl rsa -in ${ABUILD_KEY_DIR}/${MAINTAINER}-key.pem -pubout -out /etc/apk/keys/${MAINTAINER}.rsa.pub && \
-    echo "PACKAGER_PRIVKEY=\"${ABUILD_KEY_DIR}/${MAINTAINER}-key.pem\"" > ${ABUILD_KEY_DIR}/abuild.conf && \
+	(([[ -n "${PRIVKEY}" ]] && echo "using passed key" && echo "$PRIVKEY" > ${ABUILD_KEY_DIR}/${MAINTAINER}.rsa) || \
+    openssl genrsa -out ${ABUILD_KEY_DIR}/${MAINTAINER}.rsa 2048) && \
+    openssl rsa -in ${ABUILD_KEY_DIR}/${MAINTAINER}.rsa -pubout -out /etc/apk/keys/${MAINTAINER}.rsa.pub && \
+    echo "PACKAGER_PRIVKEY=\"${ABUILD_KEY_DIR}/${MAINTAINER}.rsa\"" > ${ABUILD_KEY_DIR}/abuild.conf && \
     sed -i "s/<\${GLIBC_VERSION}-checksum>/$(cat glibc-bin-${GLIBC_VERSION}.sha512sum | awk '{print $1}')/" APKBUILD && \
 	export TARGETARCH=$(echo $TARGETARCH | sed -e's/arm64/aarch64/' ) && \
 	echo TARGETARCH=$TARGETARCH && \
