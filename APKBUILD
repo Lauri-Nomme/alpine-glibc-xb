@@ -26,16 +26,20 @@ package() {
   rm -rf "$pkgdir"/usr/glibc-compat/lib/audit
   rm -rf "$pkgdir"/usr/glibc-compat/share
   rm -rf "$pkgdir"/usr/glibc-compat/var
-  ln -s /usr/glibc-compat/lib/ld-linux-$arch.so.1 ${pkgdir}/lib/ld-linux-$arch.so.1
-  ln -s /usr/glibc-compat/lib/ld-linux-$arch.so.1 ${pkgdir}/lib64/ld-linux-$arch.so.1
-  ln -s /usr/glibc-compat/lib/ld-linux-$arch.so.1 ${pkgdir}/usr/glibc-compat/lib64/ld-linux-$arch.so.1
-  ln -s /usr/glibc-compat/etc/ld.so.cache ${pkgdir}/etc/ld.so.cache
+  LINKER_NAME=$(basename "$pkgdir"/usr/glibc-compat/lib/ld-linux*)
+  echo "Detected linker name: $LINKER_NAME"
+  ln -s /usr/glibc-compat/lib/$LINKER_NAME "$pkgdir"/lib/$LINKER_NAME
+  ln -s /usr/glibc-compat/lib/$LINKER_NAME "$pkgdir"/lib64/$LINKER_NAME
+  ln -s /usr/glibc-compat/lib/$LINKER_NAME "$pkgdir"/usr/glibc-compat/lib64/$LINKER_NAME
+  ln -s /usr/glibc-compat/etc/ld.so.cache "$pkgdir"/etc/ld.so.cache
 }
 
 bin() {
   depends="$pkgname libgcc"
   mkdir -p "$subpkgdir"/usr/glibc-compat
   cp -a "$srcdir"/usr/glibc-compat/bin "$subpkgdir"/usr/glibc-compat
+  # bash might not be installed on alpine, should override BASH_SHELL on glibc build
+  sed -i 's/\/usr\/bin\/bash/\/bin\/sh/g' "$subpkgdir"/usr/glibc-compat/bin/*
   cp -a "$srcdir"/usr/glibc-compat/sbin "$subpkgdir"/usr/glibc-compat
 }
 
