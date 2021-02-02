@@ -45,8 +45,8 @@ pipeline {
         stage('Publish') {
             steps {
                 sh  '''
-                    ls -latr out
-                    rm -rf out
+                    ls -latr out || true
+                    rm -rf out || true
                     mkdir out && chmod 777 out
                     docker run -v $(realpath out):/out --rm --entrypoint sh glibc:out -c "cp -r /packages/*.pub /packages/*/*/* /out/"
                     ls -latr out
